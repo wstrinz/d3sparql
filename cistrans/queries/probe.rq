@@ -1,0 +1,27 @@
+################# MARKER/LOD/GENE FOR A GIVEN PROBE ###############################
+PREFIX f2gns:     <http://www.rqtl.org/ns/dataset/f2g#>
+PREFIX phenons: <http://www.rqtl.org/ns/dataset/islet_mlratio#>
+PREFIX scanns: <http://www.rqtl.org/ns/dataset/scan_islet#>
+PREFIX annons: <http://www.rqtl.org/ns/#>
+PREFIX qb:   <http://purl.org/linked-data/cube#> 
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX prop: <http://www.rqtl.org/dc/properties/> 
+PREFIX cs:   <http://www.rqtl.org/dc/cs/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+
+
+SELECT ?marker ?lod ?gene WHERE {
+ ?s qb:dataSet scanns:dataset-scan_islet;
+    prop:probe "497638"^^<http://www.w3.org/2001/XMLSchema#integer>;
+    prop:marker ?marker;
+    prop:lod ?lod.
+
+ FILTER (STRSTARTS(?marker, "r"))
+
+ ?t qb:dataSet annons:dataset-annot;
+   rdfs:label "497638";
+   prop:gene ?gene.
+}
+ORDER BY(?marker)
+LIMIT 1000

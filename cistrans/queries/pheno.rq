@@ -1,0 +1,24 @@
+################## ALL PHENO/GENO FOR EACH MOUSE on a given probe/marker ######################
+PREFIX f2gns:     <http://www.rqtl.org/ns/dataset/f2g#>
+PREFIX phenons: <http://www.rqtl.org/ns/dataset/islet_mlratio#>
+PREFIX qb:   <http://purl.org/linked-data/cube#> 
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX prop: <http://www.rqtl.org/dc/properties/> 
+PREFIX cs:   <http://www.rqtl.org/dc/cs/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+
+SELECT DISTINCT ?mouse ?pheno ?geno WHERE {
+	?s qb:dataSet phenons:dataset-islet_mlratio; 
+		prop:individual ?mouse;
+		prop:probe "511932"^^<http://www.w3.org/2001/XMLSchema#integer>;
+		prop:pheno ?pheno.
+
+	?t qb:dataSet f2gns:dataset-f2g;
+		prop:marker "rs13475697";
+		prop:MouseNum ?mouse2;
+		prop:genotype ?geno.
+
+	FILTER(?mouse2 = ?mouse)
+}
+LIMIT 175
