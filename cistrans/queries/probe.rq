@@ -17,8 +17,6 @@ SELECT ?marker ?lod ?gene WHERE {
     prop:marker ?marker;
     prop:lod ?lod.
 
- FILTER (STRSTARTS(?marker, "r"))
-
  ?t qb:dataSet annons:dataset-annot;
    rdfs:label "497638";
    prop:gene ?gene.
