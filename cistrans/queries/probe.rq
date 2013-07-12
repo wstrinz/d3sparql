@@ -24,4 +24,4 @@ SELECT ?marker ?lod ?gene WHERE {
    prop:gene ?gene.
 }
 ORDER BY(?marker)
-LIMIT 1000
+LIMIT 5000
