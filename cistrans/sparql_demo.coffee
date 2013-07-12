@@ -1,19 +1,26 @@
 
-query_url = "http://localhost:8080/sparql/?soft-limit=5000&output=json";
+# query_url = "http://localhost:8080/sparql/?soft-limit=5000&output=json";
+query_url = "http://localhost:4567/doquery/";
 
 probe_number = "513550"
 marker = "rs6175633"
 
-$(document).ready ->
-	
+window.submitForm = (form) -> 
+	probe_number = form.probe.value.toString()
+	marker = form.marker.value.toString()
+	reloadQueries()
+
+reloadQueries = () ->
 	document.getElementById("genotext").innerHTML = "Parsed Markers/LODs/gene for probe #{probe_number}";
 	document.getElementById("phenotext").innerHTML = "Raw JSON for Pheno/Geno/individual for probe #{probe_number}, marker #{marker}";
+	document.getElementById("probe").innerHTML = "Loading..."
+	document.getElementById("pheno").innerHTML = "Loading..."
 
 	$.ajax 'queries/probe.rq',
 		type: 'GET',
 		success:(data) ->
 			# console.log data.replace(/497638/g,probe_number)
-			$.ajax query_url + "&query=" + encodeURIComponent(data.replace(/497638/g,probe_number)),
+			$.ajax query_url + encodeURIComponent(data.replace(/497638/g,probe_number)),
 				type: 'GET',
 				success: (data) ->
 					parsed = gene: data.results.bindings[0].gene.value;
@@ -25,9 +32,14 @@ $(document).ready ->
 	$.ajax 'queries/pheno.rq',
 		type: 'GET',
 		success:(data) ->
-			$.ajax query_url + "&query=" + encodeURIComponent(data.replace(/511932/g,probe_number).replace(/rs13475697/g,marker)),
+			$.ajax query_url + encodeURIComponent(data.replace(/511932/g,probe_number).replace(/rs13475697/g,marker)),
 				type: 'GET',
 				success: (data) ->
 					document.getElementById("pheno").innerHTML = JSON.stringify(data);
+
+
+
+$(document).ready ->
+	# reloadQueries()
 
 
