@@ -1,5 +1,8 @@
 
-# query_url = "http://localhost:8080/sparql/?soft-limit=5000&output=json";
+# Since 4store's CORS and jsonp functionality is  not well documented, I just put together a
+# proxy to handle the request. To get the endpoint directly with, eg, curl, you could use
+# "http://localhost:8080/sparql/?soft-limit=5000&output=json&query=" as the query url;
+
 query_url = "http://localhost:4567/doquery/";
 
 probe_number = "513550"
@@ -19,7 +22,6 @@ reloadQueries = () ->
 	$.ajax 'queries/probe.rq',
 		type: 'GET',
 		success:(data) ->
-			# console.log data.replace(/497638/g,probe_number)
 			$.ajax query_url + encodeURIComponent(data.replace(/497638/g,probe_number)),
 				type: 'GET',
 				success: (data) ->
