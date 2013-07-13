@@ -3,7 +3,7 @@
 # proxy to handle the request. To get the endpoint directly with, eg, curl, you could use
 # "http://localhost:8080/sparql/?soft-limit=5000&output=json&query=" as the query url;
 
-query_url = "http://localhost:4567/doquery/";
+query_url = "http://#{window.location.host}/doquery/";
 
 probe_number = "513550"
 marker = "rs6175633"
