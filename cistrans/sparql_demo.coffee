@@ -17,33 +17,40 @@ reloadQueries = () ->
 	document.getElementById("genotext").innerHTML = "Parsed Markers/LODs/gene for probe #{probe_number}";
 	document.getElementById("phenoparsedtext").innerHTML = "Parsed Pheno/Geno/individual for probe #{probe_number}, marker #{marker}";
 	document.getElementById("phenotext").innerHTML = "Raw JSON for Pheno/Geno/individual for probe #{probe_number}, marker #{marker}";
-	document.getElementById("probe").innerHTML = "Loading..."
-	document.getElementById("phenoparsed").innerHTML = "Loading..."
+	document.getElementById("probe").innerHTML = "Loading Query..."
+	document.getElementById("phenoparsed").innerHTML = "Loading Query..."
+	document.getElementById("pheno").innerHTML = "Loading Query..."
 
 	$.ajax 'queries/probe.rq',
 		type: 'GET',
 		success:(data) ->
+			document.getElementById("probe").innerHTML = "Querying..."
 			$.ajax query_url + encodeURIComponent(data.replace(/497638/g,probe_number)),
 				type: 'GET',
 				success: (data) ->
-					# parsed.markers = data.results.bindings.map (b) -> b.marker.value ;
+					document.getElementById("probe").innerHTML = "Parsing..."
 					parsed = []
-					parsed.push {gene: data.results.bindings[0].gene.value}
-					data.results.bindings.map (b) ->
-						parsed.push 
-							marker: b.marker.value,
-							lod: b.lod.value,
-							
-					# parsed.lods = data.results.bindings.map (b) -> b.lod.value ;
-					# console.log "got probe,",parsed.markers.length ;
-					document.getElementById("probe").innerHTML = JSON.stringify(parsed);
+					if data.results.bindings[0].gene
+						parsed.push {gene: data.results.bindings[0].gene.value}
+						data.results.bindings.map (b) ->
+							parsed.push 
+								marker: b.marker.value,
+								lod: b.lod.value,
+
+						document.getElementById("probe").innerHTML = JSON.stringify(parsed);
+					else
+						document.getElementById("probe").innerHTML = "no data for #{probe_number}";
+						
+
 
 	$.ajax 'queries/pheno.rq',
 		type: 'GET',
 		success:(data) ->
+			document.getElementById("phenoparsed").innerHTML = "Querying..."
 			$.ajax query_url + encodeURIComponent(data.replace(/511932/g,probe_number).replace(/rs13475697/g,marker)),
 				type: 'GET',
 				success: (data) ->
+					document.getElementById("phenoparsed").innerHTML = "Parsing..."
 					parsed = []
 					data.results.bindings.map (b) ->
 						parsed.push 
@@ -51,10 +58,7 @@ reloadQueries = () ->
 							pheno: b.pheno.value,
 							sex: b.sex.value,
 							geno: b.geno.value
-						
-					# parsed = mouse: data.results.bindings.map (b) -> b.mouse.value ;
-					# parsed.pheno = data.results.bindings.map (b) -> b.pheno.value 
-					# parsed.geno = data.results.bindings.map (b) -> b.geno.value 
+
 					document.getElementById("phenoparsed").innerHTML = JSON.stringify(parsed);
 					document.getElementById("pheno").innerHTML = JSON.stringify(data);
 
