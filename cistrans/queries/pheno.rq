@@ -14,11 +14,10 @@ SELECT DISTINCT ?mouse ?pheno ?sex ?geno WHERE {
 		prop:probe "511932"^^<http://www.w3.org/2001/XMLSchema#integer>;
 		prop:pheno ?pheno.
 		
-
 	?t qb:dataSet f2gns:dataset-f2g;
 		prop:marker "rs13475697";
 		prop:MouseNum ?mouse2;
-		prop:Sex ?sex;
+		prop:SexID ?sex;
 		prop:genotype ?geno.
 
 	FILTER(?mouse2 = ?mouse)
