@@ -5,7 +5,7 @@
 
 query_url = "http://#{window.location.host}/doquery/";
 
-probe_number = "513550"
+probe_number = "497638"
 marker = "rs6175633"
 
 window.submitForm = (form) -> 
