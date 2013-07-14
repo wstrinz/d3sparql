@@ -8,15 +8,17 @@ PREFIX prop: <http://www.rqtl.org/dc/properties/>
 PREFIX cs:   <http://www.rqtl.org/dc/cs/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
 
-SELECT DISTINCT ?mouse ?pheno ?geno WHERE {
+SELECT DISTINCT ?mouse ?pheno ?sex ?geno WHERE {
 	?s qb:dataSet phenons:dataset-islet_mlratio; 
 		prop:individual ?mouse;
 		prop:probe "511932"^^<http://www.w3.org/2001/XMLSchema#integer>;
 		prop:pheno ?pheno.
+		
 
 	?t qb:dataSet f2gns:dataset-f2g;
 		prop:marker "rs13475697";
 		prop:MouseNum ?mouse2;
+		prop:Sex ?sex;
 		prop:genotype ?geno.
 
 	FILTER(?mouse2 = ?mouse)

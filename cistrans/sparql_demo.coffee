@@ -30,12 +30,12 @@ reloadQueries = () ->
 					parsed = []
 					parsed.push {gene: data.results.bindings[0].gene.value}
 					data.results.bindings.map (b) ->
-						parsed.push {
+						parsed.push 
 							marker: b.marker.value,
 							lod: b.lod.value,
-							}
+							
 					# parsed.lods = data.results.bindings.map (b) -> b.lod.value ;
-					console.log "got probe,",parsed.markers.length ;
+					# console.log "got probe,",parsed.markers.length ;
 					document.getElementById("probe").innerHTML = JSON.stringify(parsed);
 
 	$.ajax 'queries/pheno.rq',
@@ -46,11 +46,12 @@ reloadQueries = () ->
 				success: (data) ->
 					parsed = []
 					data.results.bindings.map (b) ->
-						parsed.push {
+						parsed.push 
 							mouse: b.mouse.value,
 							pheno: b.pheno.value,
+							sex: b.sex.value,
 							geno: b.geno.value
-							}
+						
 					# parsed = mouse: data.results.bindings.map (b) -> b.mouse.value ;
 					# parsed.pheno = data.results.bindings.map (b) -> b.pheno.value 
 					# parsed.geno = data.results.bindings.map (b) -> b.geno.value 
