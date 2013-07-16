@@ -54,8 +54,8 @@ reloadQueries = () ->
 				type: 'GET',
 				success: (data) ->
 					genodata = data
-					document.getElementById("probe").innerHTML = "Querying pheno data..."
-					document.getElementById("probeparsed").innerHTML = "Querying pheno data..."
+					document.getElementById("probe").innerHTML = "Waiting for pheno results"
+					document.getElementById("probeparsed").innerHTML = "Waiting for pheno results"
 					document.getElementById("pheno").innerHTML = "Querying pheno data..."
 					document.getElementById("phenoparsed").innerHTML = "Querying pheno data..."
 					$.ajax 'queries/pheno.rq',

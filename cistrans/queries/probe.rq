@@ -11,7 +11,7 @@ PREFIX cs:   <http://www.rqtl.org/dc/cs/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
 
 
-SELECT ?marker ?lod ?gene WHERE {
+SELECT DISTINCT ?marker ?lod ?gene WHERE {
  ?s qb:dataSet scanns:dataset-scan_islet;
     prop:probe "497638"^^<http://www.w3.org/2001/XMLSchema#integer>;
     prop:marker ?marker;
