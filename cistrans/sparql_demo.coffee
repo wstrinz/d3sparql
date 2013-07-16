@@ -13,55 +13,62 @@ window.submitForm = (form) ->
 	marker = form.marker.value.toString()
 	reloadQueries()
 
+parseResults = (genojson, phenojson) ->
+	probeobj = {
+		probe: probe_number,
+		pheno: [],
+		lod: []
+	}
+
+	genoobj = {
+		geno: {}
+	}
+	genoobj.geno[marker] = []
+
+	genojson.results.bindings.map (b) ->
+		probeobj.lod.push b.lod.value
+	
+	phenojson.results.bindings.map (b) ->
+		probeobj.pheno.push b.pheno.value
+		genoobj.geno[marker].push b.geno.value
+
+	[probeobj, genoobj]
+
 reloadQueries = () ->
 	document.getElementById("genotext").innerHTML = "Parsed Markers/LODs/gene for probe #{probe_number}";
 	document.getElementById("phenoparsedtext").innerHTML = "Parsed Pheno/Geno/individual for probe #{probe_number}, marker #{marker}";
+	document.getElementById("genoraw").innerHTML = "Raw Markers/LODs/gene for probe #{probe_number}";
 	document.getElementById("phenotext").innerHTML = "Raw JSON for Pheno/Geno/individual for probe #{probe_number}, marker #{marker}";
+
+	document.getElementById("probeparsed").innerHTML = "Loading Query..."
 	document.getElementById("probe").innerHTML = "Loading Query..."
-	document.getElementById("phenoparsed").innerHTML = "Loading Query..."
-	document.getElementById("pheno").innerHTML = "Loading Query..."
+	document.getElementById("phenoparsed").innerHTML = "Waiting..."
+	document.getElementById("pheno").innerHTML = "Waiting..."
 
 	$.ajax 'queries/probe.rq',
 		type: 'GET',
 		success:(data) ->
-			document.getElementById("probe").innerHTML = "Querying..."
+			document.getElementById("probe").innerHTML = "Querying probe data..."
+			document.getElementById("probeparsed").innerHTML = "Querying probe data..."
 			$.ajax query_url + encodeURIComponent(data.replace(/497638/g,probe_number)),
 				type: 'GET',
 				success: (data) ->
-					document.getElementById("probe").innerHTML = "Parsing..."
-					parsed = []
-					if data.results.bindings[0]
-						parsed.push {gene: data.results.bindings[0].gene.value}
-						data.results.bindings.map (b) ->
-							parsed.push 
-								marker: b.marker.value,
-								lod: b.lod.value,
-
-						document.getElementById("probe").innerHTML = JSON.stringify(parsed);
-					else
-						document.getElementById("probe").innerHTML = "no data for #{probe_number}";
-						
-
-
-	$.ajax 'queries/pheno.rq',
-		type: 'GET',
-		success:(data) ->
-			document.getElementById("phenoparsed").innerHTML = "Querying..."
-			$.ajax query_url + encodeURIComponent(data.replace(/511932/g,probe_number).replace(/rs13475697/g,marker)),
-				type: 'GET',
-				success: (data) ->
-					document.getElementById("phenoparsed").innerHTML = "Parsing..."
-					parsed = []
-					data.results.bindings.map (b) ->
-						parsed.push 
-							mouse: b.mouse.value,
-							pheno: b.pheno.value,
-							sex: b.sex.value,
-							geno: b.geno.value
-
-					document.getElementById("phenoparsed").innerHTML = JSON.stringify(parsed);
-					document.getElementById("pheno").innerHTML = JSON.stringify(data);
-
+					genodata = data
+					document.getElementById("probe").innerHTML = "Querying pheno data..."
+					document.getElementById("probeparsed").innerHTML = "Querying pheno data..."
+					document.getElementById("pheno").innerHTML = "Querying pheno data..."
+					document.getElementById("phenoparsed").innerHTML = "Querying pheno data..."
+					$.ajax 'queries/pheno.rq',
+						type: 'GET',
+						success:(data) ->
+							$.ajax query_url + encodeURIComponent(data.replace(/511932/g,probe_number).replace(/rs13475697/g,marker)),
+								type: 'GET',
+								success: (data) ->
+									parsed = parseResults(genodata, data)
+									document.getElementById("probeparsed").innerHTML = JSON.stringify(parsed[0], null, "  ")
+									document.getElementById("probe").innerHTML = JSON.stringify(genodata);
+									document.getElementById("phenoparsed").innerHTML = JSON.stringify(parsed[1], null, "  ")
+									document.getElementById("pheno").innerHTML = JSON.stringify(data);
 
 
 $(document).ready ->
