@@ -16,9 +16,10 @@ SELECT ?marker ?lod ?gene WHERE {
     prop:probe "497638"^^<http://www.w3.org/2001/XMLSchema#integer>;
     prop:marker ?marker;
     prop:lod ?lod.
-
- ?t qb:dataSet annons:dataset-annot;
-   rdfs:label "497638";
-   prop:gene ?gene.
+	OPTIONAL {
+		?t qb:dataSet annons:dataset-annot;
+			rdfs:label "497638";
+			prop:gene ?gene.
+	}
 }
 LIMIT 5000

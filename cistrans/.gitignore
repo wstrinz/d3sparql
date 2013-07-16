@@ -1,5 +1,6 @@
 R/*.RData
 data/*.json
+cache/*
 data/*.tgz
 *.js
 alltissues/

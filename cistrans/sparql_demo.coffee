@@ -30,7 +30,7 @@ reloadQueries = () ->
 				success: (data) ->
 					document.getElementById("probe").innerHTML = "Parsing..."
 					parsed = []
-					if data.results.bindings[0].gene
+					if data.results.bindings[0]
 						parsed.push {gene: data.results.bindings[0].gene.value}
 						data.results.bindings.map (b) ->
 							parsed.push 
