@@ -9,6 +9,7 @@ configure do
   set :public_folder, File.dirname(__FILE__)
   set :cache_queries, true
   set :cached_responses, {}
+  set :endpoint_address, "http://50.116.40.22:8080/sparql"
 end
 
 #for jquery etc
@@ -23,12 +24,12 @@ end
 #probably should use NET::HTTP or something if portability is needed
 get '/doquery/:query' do |query|
 	content_type :json
-	query_url = "http://50.116.40.22:8080/sparql/?soft-limit=5000&output=json";
+	query_url = "#{settings.endpoint_address}/?soft-limit=5000&output=json";
 	query = CGI.escape(query)
 	if settings.cache_queries
 		encoded_query = Zlib::Deflate.deflate(query)
 		if settings.cached_responses.keys.include?(encoded_query)
-			response = IO.read("./cache/#{settings.cached_responses[encoded_query]}.json")
+			response = IO.read("./cache/#{settings.cached_responses[encoded_query]}")
 			response
 		else
 			response = `curl -g '#{query_url}&query=#{query}'`
