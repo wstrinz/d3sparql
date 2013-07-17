@@ -23,4 +23,5 @@ SELECT DISTINCT ?marker ?lod ?gene WHERE {
 			prop:gene ?gene.
 	}
 }
+ORDER BY(?marker)
 LIMIT 5000

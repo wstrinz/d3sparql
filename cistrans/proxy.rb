@@ -21,6 +21,10 @@ get '/sparqldemo' do
 	send_file './sparql_demo.html'
 end
 
+get '/index' do
+  send_file './index_rev.html'
+end
+
 #probably should use NET::HTTP or something if portability is needed
 get '/doquery/:query' do |query|
 	content_type :json

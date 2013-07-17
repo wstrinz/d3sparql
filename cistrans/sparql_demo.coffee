@@ -26,11 +26,11 @@ parseResults = (genojson, phenojson) ->
 	genoobj.geno[marker] = []
 
 	genojson.results.bindings.map (b) ->
-		probeobj.lod.push b.lod.value
+		probeobj.lod.push +b.lod.value
 	
 	phenojson.results.bindings.map (b) ->
-		probeobj.pheno.push b.pheno.value
-		genoobj.geno[marker].push b.geno.value
+		probeobj.pheno.push +b.pheno.value
+		genoobj.geno[marker].push +b.geno.value
 
 	[probeobj, genoobj]
 
