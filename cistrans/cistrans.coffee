@@ -22,6 +22,43 @@
 # This is awful code; I just barely know what I'm doing.
 
 # function that does all of the work
+parseResults = (probe, genojson, phenojson) ->
+  probeobj = {
+    probe: probe,
+    pheno: [],
+    lod: []
+  }
+
+  genojson.results.bindings.map (b) ->
+    probeobj.lod.push +b.lod.value
+  
+  phenojson.results.bindings.map (b) ->
+    probeobj.pheno.push +b.pheno.value
+  #   genoobj.geno[marker].push +b.geno.value
+
+  probeobj
+
+load_probe_query = (probe, draw_fn) ->
+  query_url = "http://#{window.location.host}/doquery/";
+
+  $.ajax 'queries/probe.rq',
+    type: 'GET',
+    success:(data) ->
+      $.ajax query_url + encodeURIComponent(data.replace(/497638/g,probe)),
+        type: 'GET',
+        success: (data) ->
+          genodata = data
+          $.ajax 'queries/pheno.rq',
+            type: 'GET',
+            success:(data) ->
+              $.ajax query_url + encodeURIComponent(data.replace(/511932/g,probe)),
+                type: 'GET',
+                success: (data) -> 
+                  res = parseResults(probe, genodata, data)
+                  draw_fn(res)
+                  # load_probe_query(probe, draw_fn)
+                  # d3.json(JSON.stringify(res), draw_fn)
+
 draw = (data) ->
 
   d3.select("p#loading").remove()
@@ -751,7 +788,8 @@ draw = (data) ->
                                 .attr("opacity", (d) -> Zscale(d.lod))
                  d3.selectAll("#eqtltip").remove()
              .on "click", (d) ->
-                 d3.json("data/probe_data/probe#{d.probe}.json", draw_probe)
+                load_probe_query(d.probe, draw_probe)
+                 # d3.json("data/probe_data/probe#{d.probe}.json", draw_probe)
 
   # initial set of LOD curves at the bottom
   d3.json("data/probe_data/probe517761.json", draw_probe)
