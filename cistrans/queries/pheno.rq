@@ -23,4 +23,4 @@ SELECT DISTINCT ?mouse ?pheno ?sex ?geno WHERE {
 	FILTER(?mouse2 = ?mouse)
 }
 ORDER BY(?mouse)
-LIMIT 175
+LIMIT 500
