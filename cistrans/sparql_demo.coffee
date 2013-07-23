@@ -35,8 +35,8 @@ parseResults = (genojson, phenojson) ->
 	[probeobj, genoobj]
 
 reloadQueries = () ->
-	document.getElementById("genotext").innerHTML = "Parsed genotypes for probe #{probe_number}";
-	document.getElementById("phenoparsedtext").innerHTML = "Parsed phenotypes and lods for probe #{probe_number}, marker #{marker}";
+	document.getElementById("genotext").innerHTML = "Parsed phenotypes and LODs for probe #{probe_number}";
+	document.getElementById("phenoparsedtext").innerHTML = "Genotypes for #{probe_number}, marker #{marker}";
 	document.getElementById("genoraw").innerHTML = "Raw Markers/LODs/gene for probe #{probe_number}";
 	document.getElementById("phenotext").innerHTML = "Raw JSON for Pheno/Geno/individual for probe #{probe_number}, marker #{marker}";
 
